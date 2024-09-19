@@ -13,12 +13,12 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
-  // Router.beforeEach((to, from, next) => {
-  //   const user = localStorage.getItem('andoma:login');
-  //   if ( to.meta.requiresAuth && !user ) next ({ path: '/signin' })
-  //   else if (to.path.startsWith('/signin') && user) { next({ path: '/home' }) }
-  //   else next()
-  // })
+  Router.beforeEach((to, from, next) => {
+    const user = localStorage.getItem('user');
+    // if ( to.meta.requiresAuth && !user ) next ({ path: '/signin' })
+    if (to.path.startsWith('/signin') && user) { next({ path: '/home' }) }
+    else next()
+  })
 
   return Router
 })

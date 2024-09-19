@@ -44,7 +44,7 @@ const formData = reactive({
   password: ''
 })
 
-const onSubmit = async () => { const { c, msg } = await signin(formData.username, formData.password); c !== 200 ? console.log(`${c}: ${msg}`) : router.replace('/test') }
+const onSubmit = async () => { const { c, msg } = await signin(formData.username, formData.password); c !== 200 ? console.log(`${c}: ${msg}`) : router.replace('/home') }
 
 </script>
 
