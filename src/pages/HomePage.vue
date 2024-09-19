@@ -3,8 +3,15 @@
 
     <div class="flex flex-center justify-evenly" style="width: 60%; height: 5vh;">
       <q-btn class="shadow-3" color="red" text-color="white" label="Главная" unelevated rounded icon="fas fa-sort-up" @click="goToHome" />
-      <q-btn class="shadow-3" color="red" text-color="white" label="Личный кабинет" unelevated rounded icon="fas fa-user" @click="logout" />
+      <q-btn class="shadow-3" color="red" text-color="white" label="Личный кабинет" unelevated rounded icon="fas fa-user" @click=goToMyAccount />
       <q-btn class="shadow-3" color="red" text-color="white" :label="btnEntryLabel" unelevated rounded icon="fas fa-sign-out" @click=action />
+    </div>
+
+    <div class="showMyAccount flex flex-center" style="width: 100%; height: 100vh; background-color: rgba(0, 0, 0, 0.3); position: absolute; z-index: 9999;" v-if="showMyAccount.value" @click="showMyAccount.value = false">
+      <div class="bg-grey flex flex-center" style="width: 60%; height: 70vh;"><h3><b>In Progress</b></h3></div>
+    </div>
+    <div class="showInfo" style="width: 100%; height: 100vh; background-color: rgba(0, 0, 0, 0.3); position: absolute; z-index: 999;" v-if="showInfo" @click=showMap>
+
     </div>
 
     <q-scroll-area ref="scrollAreaRef" style="width: 100%; height: 93vh;">
@@ -32,7 +39,7 @@
             <q-btn flat>
               9:00AM
             </q-btn>
-            <q-btn flat color="primary">
+            <q-btn flat color="primary" @click=showMap(1)>
               Место
             </q-btn>
           </q-card-actions>
@@ -61,7 +68,7 @@
             <q-btn flat>
               10:00AM
             </q-btn>
-            <q-btn flat color="primary">
+            <q-btn flat color="primary" @click=showMap(2)>
               Место
             </q-btn>
           </q-card-actions>
@@ -92,7 +99,7 @@
             <q-btn flat>
               11:00AM
             </q-btn>
-            <q-btn flat color="primary">
+            <q-btn flat color="primary" @click=showMap(3)>
               Место
             </q-btn>
           </q-card-actions>
@@ -121,7 +128,7 @@
             <q-btn flat>
               12:00AM
             </q-btn>
-            <q-btn flat color="primary">
+            <q-btn flat color="primary" @click=showMap(4)>
               Место
             </q-btn>
           </q-card-actions>
@@ -153,7 +160,7 @@
             <q-btn flat>
               11:00AM
             </q-btn>
-            <q-btn flat color="primary">
+            <q-btn flat color="primary" @click=showMap(5)>
               Место
             </q-btn>
           </q-card-actions>
@@ -182,7 +189,7 @@
             <q-btn flat>
               10:00AM
             </q-btn>
-            <q-btn flat color="primary">
+            <q-btn flat color="primary" @click=showMap(6)>
               Место
             </q-btn>
           </q-card-actions>
@@ -212,7 +219,7 @@
             <q-btn flat>
               8:30AM
             </q-btn>
-            <q-btn flat color="primary">
+            <q-btn flat color="primary" @click=showMap(7)>
               Место
             </q-btn>
           </q-card-actions>
@@ -230,9 +237,11 @@ defineOptions({
   name: 'HomePage'
 });
 
-import { ref } from 'vue';
+import { route } from 'quasar/wrappers';
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
+const user = JSON.parse(localStorage.getItem('user'));
 
 const scrollAreaRef = ref(null)
 const position = ref(0)
@@ -242,11 +251,30 @@ const goToHome = () => {
   position.value = 0;
 }
 
-const user = JSON.parse(localStorage.getItem('user'));
-let btnEntryLabel = user? 'Выйти' : 'Войти';
+const showMyAccount = ref({value: false});
+const goToMyAccount = () => {
+  if(user) { showMyAccount.value.value = !showMyAccount.value.value }
+  else { router.push('/signin') }
+}
 
+let btnEntryLabel = user? 'Выйти' : 'Войти';
 const action = () => {
   if(user) { localStorage.removeItem('user'); window.location.reload() }
   else { router.push('/signin') }
+}
+
+const showInfo = ref(false)
+const showMap = (item) => {
+  const items = {
+    1: "https://yandex.ru/maps/10735/krasnogorsk/search/МВЦ%20Крокус%20Экспо/?ll=37.408660%2C55.809509&sctx=ZAAAAAgBEAAaKAoSCYEGmzqPokFAEXMqGQCq9EtAEhIJ2XdF8L%2FFH0ARbHu7JTmACUAiBgABAgMEBSgKOABAA0gBYjVyZWFycj1zY2hlbWVfTG9jYWwvR2VvL1Bvc3RmaWx0ZXIvSXJyZWxUaHJlc2hvbGQ9MC4xNWI7cmVhcnI9c2NoZW1lX0xvY2FsL0dlby9Qb3N0ZmlsdGVyL0lycmVsVGhyZXNob2xkRm9yQWRzPTAuMTBqAnJ1nQHNzEw9oAEAqAEAvQFpMG%2BZwgELgpL%2B8wTk3am6qAaCAh7QnNCS0KYg0JrRgNC%2B0LrRg9GBINCt0LrRgdC%2F0L6KAgCSAgCaAgxkZXNrdG9wLW1hcHM%3D&sll=37.408660%2C55.809509&sspn=0.062056%2C0.024965&z=15",
+    2: "https://yandex.ru/maps/org/lotte_otel/75944821177/?ll=37.579585%2C55.750153&mode=search&sll=37.583705%2C55.750153&text=Россия%2C%20Москва%20%2C%20Lotte%20Hotel%20Moscow&z=16",
+    3: "",
+    4: "",
+    5: "",
+    6: "",
+    7: ""
+  }
+  location.replace("https://yandex.ru/maps/10735/krasnogorsk/search/МВЦ%20Крокус%20Экспо/?ll=37.408660%2C55.809509&sctx=ZAAAAAgBEAAaKAoSCYEGmzqPokFAEXMqGQCq9EtAEhIJ2XdF8L%2FFH0ARbHu7JTmACUAiBgABAgMEBSgKOABAA0gBYjVyZWFycj1zY2hlbWVfTG9jYWwvR2VvL1Bvc3RmaWx0ZXIvSXJyZWxUaHJlc2hvbGQ9MC4xNWI7cmVhcnI9c2NoZW1lX0xvY2FsL0dlby9Qb3N0ZmlsdGVyL0lycmVsVGhyZXNob2xkRm9yQWRzPTAuMTBqAnJ1nQHNzEw9oAEAqAEAvQFpMG%2BZwgELgpL%2B8wTk3am6qAaCAh7QnNCS0KYg0JrRgNC%2B0LrRg9GBINCt0LrRgdC%2F0L6KAgCSAgCaAgxkZXNrdG9wLW1hcHM%3D&sll=37.408660%2C55.809509&sspn=0.062056%2C0.024965&z=15")
+  //showInfo.value = !showInfo.value
 }
 </script>

@@ -13,7 +13,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('layouts/MainLayout.vue'),
     meta: { requiresAuth: true },
     children: [
-      { path: '', component: () => import('pages/HomePage.vue') },
+      { path: '/home', component: () => import('pages/HomePage.vue') },
     ]
   },
 
